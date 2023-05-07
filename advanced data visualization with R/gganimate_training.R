@@ -1,6 +1,3 @@
-#install.packages("gganimate")  ---- if you need to install
-#install.packages("gifski") --- needed for PCs
-
 library(tidyverse)
 library(gganimate)
 library(gifski)
@@ -91,7 +88,7 @@ anim3<-ggplot(cong_dat,aes(x=year,y=Seats,fill=party))+
 
 anim3
 
-####the animation will save to your working directory
+####save the result
 anim_save("test.gif",animation=anim3)
 
 
