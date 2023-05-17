@@ -12,9 +12,8 @@ ui <- fluidPage(
 
   sidebarLayout(
     sidebarPanel(
-      helpText("Select a stock to examine.
-
-        Information will be collected from Yahoo finance."),
+      helpText("Data by: Yahoo Finance. This is the same with Posit stock example, but I modified it by using Plotly to make the chart interactive."),
+      helpText("Type the ticker symbol to examine, e.g., SPY, MSFT, AAPL, etc."),
       textInput("symb", "Symbol", "SPY"),
 
       dateRangeInput("dates",
@@ -40,6 +39,9 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   dataInput <- reactive({
+    validate(
+      need(input$symb != "", "Please enter a ticker symbol.")
+    )
     getSymbols(input$symb, src = "yahoo",
                from = input$dates[1],
                to = input$dates[2],
