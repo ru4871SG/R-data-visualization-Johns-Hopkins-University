@@ -1,0 +1,122 @@
+---
+title: "Peer Review Three"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(shiny)
+
+dat<-read_csv(url("https://www.dropbox.com/s/4ebgnkdhhxo5rac/cel_volden_wiseman%20_coursera.csv?raw=1"))
+
+dat$Party<-recode(dat$dem,`1`="Democrat",`0`="Republican")
+```
+
+Page 1
+======
+
+### Chart A
+
+
+```{r}
+dat %>%
+  drop_na() %>%
+  filter(year>1979) %>%
+  group_by(year, Party) %>%
+  summarise(passed = sum(all_pass), .groups = 'drop') %>%
+  ggplot(aes(x=year, y=passed, fill=Party)) + 
+  geom_area() +
+  scale_fill_manual(values = c("Democrat" = "blue", "Republican" = "red")) +
+  xlab("Year") + 
+  ylab("All Bills Passed") + labs(title="Number of Bills Passed Since 1980")
+```
+
+Page 2
+======
+
+Column {data-width=350}
+-------------------------------------
+
+### Chart B
+
+```{r}
+dat2 <- dat %>%
+    drop_na() %>%
+    filter(congress==110)
+
+p2_1 <- ggplot() + 
+    geom_smooth(data = dat2, aes(x = votepct, y = all_pass, color = Party)) +
+    geom_point(data = dat2, aes(x = votepct, y = all_pass, color = Party, 
+                                 text = paste('thomas_name:', thomas_name, "<br>", 'Party:', Party))) + 
+    scale_color_manual(values = c("Democrat" = "blue", "Republican" = "red")) + labs(title = "Passage and Vote Pct., 110th Congress", x = "Vote Pct.", y = "All Pass")
+
+renderPlotly(ggplotly(p2_1, tooltip = c("x", "y", "text")))
+```
+
+Column {data-width=350} 
+-------------------------------------
+
+### Chart C
+
+```{r}
+dat2_2 <- dat %>%
+    drop_na() %>%
+    filter(congress==110)
+
+p2_2 <- ggplot() + 
+    geom_smooth(data = dat2_2, aes(x = dwnom1, y = all_pass, color = Party), method = "lm") +
+    geom_point(data = dat2_2, aes(x = dwnom1, y = all_pass, color = Party, 
+                                text = paste('Party:', Party, "<br>", 'thomas_name:', thomas_name))) + 
+    scale_color_manual(values = c("Democrat" = "blue", "Republican" = "red")) + labs(title = "Passage and Ideology, 110th Congress", x = "DW Nominate.", y = "All Pass")
+
+renderPlotly(ggplotly(p2_2, tooltip = c("x", "y", "text")))
+```
+
+Page 3
+======
+
+Input {.sidebar}
+-------------------------------------
+
+### Chart D
+
+```{r}
+selectInput(
+             inputId="state_input",
+             label="State",
+             choices = sort(unique(dat$st_name)),  #Sort unique states alphabetically
+             selected= sort(unique(dat$st_name)), #Select all sorted unique states, this will select ALL states by default
+             multiple=TRUE
+            )
+```
+
+Column {data-width=650, .scrollable, data-height=750}
+-------------------------------------
+
+```{r}
+
+dat3 <- reactive({ #to limit re-run, we use reactive expression
+    req(input$state_input)  # Wait for input$state_input to be available, that's why we use req()
+    dat %>%
+        filter(congress == 110 & st_name %in% input$state_input) %>%   # Use input$state_input within reactive context
+        group_by(st_name) %>%
+        summarise(passed = sum(all_pass))
+})
+
+renderPlot({
+    ggplot(dat3(), aes(x = passed, y = st_name)) +
+    geom_bar(stat = "identity") +
+    theme_minimal() +
+    theme(panel.background = element_rect(fill = "#ebebeb"), panel.border = element_rect(fill = NA, color = "#ebebeb", size = 1)) +
+    theme(panel.grid.major = element_line(colour = "white"),
+          panel.grid.minor = element_line(colour = "white"))      +
+    labs(title = "Total Bills Passed by State Delegations, 110th Congress", x = "Total Bills Passed Per State", y = "State Name")
+}, height = 750)
+```
+

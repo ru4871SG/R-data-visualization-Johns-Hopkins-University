@@ -1,0 +1,37 @@
+---
+title: "Test Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+ggplot(mtcars,aes(x=wt, y=mpg))+geom_point()
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+ggplot(mtcars,aes(x=cyl))+geom_bar()
+```
+
+### Chart C
+
+```{r}
+ggplot(mtcars,aes(x=cyl))+geom_boxplot()
+```
+
