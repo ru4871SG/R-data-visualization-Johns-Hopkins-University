@@ -1,0 +1,48 @@
+---
+title: "Project Proposal - Data Visualization Capstone"
+author: "Ruddy Setiadi Gunawan"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Project Topic
+### Income Per Capita by State and Its Correlation to Education Level
+
+My project topic will be to analyze income per capita by state in the United States, and its correlation to education level (also by state). On top of that, I will also analyze the scale and growth of economic activity and see if we can find some interesting correlations to the income per capita numbers.
+
+This topic interests me because a lot of analysts believe there is a strong relevancy between education level and the ability to make money, but only up to certain point. 
+
+I am also curious about the distribution of jobs, wealth, and education among different states.
+
+## Data Sources
+
+I will only use government data sources. Particularly from bea.gov and usda.gov.
+
+https://apps.bea.gov/iTable/?reqid=70
+
+https://data.ers.usda.gov/reports.aspx?ID=17829#Pd3234e26487b407ba2f8a9416b41cb9f_3_240iT2
+
+
+## Description of the Data
+
+The first data visualization will try to use scatter plot to see the correlation between education level vs. income per capita. This particular visualization will use only the latest years (2021-2022).
+
+Meanwhile, the map visualizations will use time period between 1970 and the last available year (2022). They will be presented in the slider format in a Shiny dashboard.
+
+Since I will cover multiple time frames, I will also create a line chart to see the % growth over time.
+
+The data is about states, and characteristics that will be captured include: income per capita, education level, and employment numbers.
+
+
+## Ideas about the figures that you will create to visualize this data:
+
+I am going to make eight visualizations within four different figures. The figures are scatter plot, interactive map, vertical bar graph, and line graph.
+
+The scatter plot will be used to draw correlations between education level and income per capita. Meanwhile, there will be multiple interactive maps, to see income distribution or concentration by states and over the years, as well as to see the differences of college completions among different states.
+
+Vertical bar graph with selectInput will visualize the disparity among the states when it comes to income per capita as well as education levels.
+
+And lastly, line graph will be used to see the growth in terms of percentage.
