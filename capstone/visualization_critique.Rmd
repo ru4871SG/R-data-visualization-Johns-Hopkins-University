@@ -1,0 +1,24 @@
+---
+title: "Visualization Critique"
+author: "Ruddy Setiadi Gunawan"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Visualization Link
+
+Please provide a link to your visualization critique.
+
+<https://www.visualcapitalist.com/wp-content/uploads/2023/03/US-Minimum-Wage-2023-Map.jpg>
+
+## Weakness
+
+The texts should be improved. For example, the text "Mississippi" is too big, and it's going out of its own region. The text "Maine" is also too big. Since this is a static image, he can improve them by making the texts diagonal. He should also use slightly smaller font.
+
+## Strength
+
+I like how he placed Alaska and Hawaii on the bottom, instead of where they supposed to be. By doing this, one static image is enough to "fit in" the entire country.
+

@@ -1,24 +1,3 @@
----
-title: "Data Review"
-author: "Ruddy Setiadi Gunawan"
-date: "06/06/2023"
-output:
-  pdf_document: default
-  html_document: default
----
-
-```{r setup, include=FALSE}
-
-#####Make sure you load any required packages.
-
-knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
-library(janitor)
-```
-
-## Import Your Data
-
-```{r data_import, message = FALSE, warning = FALSE}
 personalincomepercapita <- read_csv("personalincomepercapita.csv")
 personalincomepercapita <- tibble(personalincomepercapita)
 
@@ -30,15 +9,7 @@ population <- tibble(population)
 
 employment <- read_csv("employment.csv")
 employment <- tibble(employment)
-```
 
-## Part 1
-
-For my first figure, I am going to create a scatterplot that plots per capita personal income on the x axis and education level (college completion) on the y axis. 
-
-I will also create a second scatterplot that plots per capita  personal income vs. total employment, and see how correlated they are.
-
-```{r data_1, message = FALSE, warning = FALSE}
 #I choose 2021 (and not 2022) because the education and employment data are only up to 2021. The 2022 data for these other tables don't exist, so it's fairer to plot 2021's data vs. 2021's data.
 part1_incomepercapita <- select(personalincomepercapita, GeoFips, GeoName, `2021`)
 part1_incomepercapita$GeoName <- gsub("\\s\\*", "", part1_incomepercapita$GeoName)
@@ -75,24 +46,14 @@ part1_merged <- slice(part1_merged, -1)
 
 #let's change the GeoFips code to just 2 digits, and assign the correct code to Puerto Rico
 part1_merged <- part1_merged %>%
-    mutate(GeoFips = sprintf("%02d", floor(GeoFips / 1000)))
+  mutate(GeoFips = sprintf("%02d", floor(GeoFips / 1000)))
 
 part1_merged <- part1_merged %>%
-    mutate(GeoFips = ifelse(GeoName == "Puerto Rico", "72", GeoFips))
+  mutate(GeoFips = ifelse(GeoName == "Puerto Rico", "72", GeoFips))
 
 #puerto rico has missing values, let's not include it this time
 part1_merged <- part1_merged[ifelse(part1_merged$GeoName == "Puerto Rico", FALSE, TRUE), ]
 
-part1_merged
-```
-
-## Part 2
-
-For my second figure, I will create interactive map (using Leaflet in R), where it will show the personal income per capita among different U.S. states. I will also include a sliderInput to filter the years.
-
-I will also create a second interactive map, it's basically the same map as above, but I will show college degree completion instead of personal income per capita.
-
-```{r data_2, message = FALSE, warning = FALSE}
 #let's clean up personalincomepercapita
 part2_earlydata <- personalincomepercapita
 part2_earlydata$GeoName <- gsub("\\s\\*", "", part2_earlydata$GeoName)
@@ -120,7 +81,7 @@ part2_map1 <- select(part2_map1, -Name)
 
 #let's change the GeoFips code to just 2 digits. No need to change GeoFips data type, we need it as chr to merge it with U.S. states geojson data later
 part2_map1 <- part2_map1 %>%
-    mutate(GeoFips = sprintf("%02d", floor(GeoFips / 1000)))
+  mutate(GeoFips = sprintf("%02d", floor(GeoFips / 1000)))
 
 #there's one blank row, let's delete it
 part2_map1 <- part2_map1[-nrow(part2_map1), ]
@@ -153,32 +114,10 @@ part2_map1 <- part2_map1 %>% select(GeoFips, GeoName, year, income_per_capita)
 
 part2_map2 <- part2_map2 %>% rename(GeoName = Name) %>% select(GeoFips, GeoName, year, college_degree)
 
-part2_map1
-part2_map2
-```
+# we don't need part3, I decided to merge them with the map pages, using the same data.
+# part3_incomepercapita <- filter(part2_map1, year == "2022")
+# part3_education <- filter(part2_map2, year == "2021")
 
-
-## Part 3
-
-I will use vertical bar graph with selectUnit in the sidebar, to show how different states compare against each other when it comes to per capita personal income and college degree completion in the recent years. 
-
-This will result in two different bar graphs (per capita personal income and college degree completion).
-
-```{r data_3, message = FALSE, warning = FALSE}
-part3_incomepercapita <- filter(part2_map1, year == "2022")
-part3_education <- filter(part2_map2, year == "2021")
-
-part3_incomepercapita
-part3_education
-```
-
-## Part 4
-
-The 4th part will show a line graph to show percentage growth regarding per capita personal income from 1970 up to the most recent year. 
-
-And then, I will make the second line graph showing college degree completion over the years as well, from 1970 up to the most recent year. and I will include the state selections in the sidebar.
-
-```{r data_4, message = FALSE, warning = FALSE}
 #let's repeat similar steps like part 2 but we include the country itself as one of the selections so we can visualize it in the line chart later
 part4_earlydata <- personalincomepercapita
 part4_earlydata$GeoName <- gsub("\\s\\*", "", part4_earlydata$GeoName)
@@ -202,7 +141,7 @@ part4_incomeline <- select(part4_incomeline, -Name)
 
 #let's change the GeoFips code to just 2 digits
 part4_incomeline <- part4_incomeline %>%
-    mutate(GeoFips = sprintf("%02d", floor(GeoFips / 1000)))
+  mutate(GeoFips = sprintf("%02d", floor(GeoFips / 1000)))
 
 #there's one blank row, let's delete it
 part4_incomeline <- part4_incomeline[-nrow(part4_incomeline), ]
@@ -226,18 +165,8 @@ part4_educationline <- part4_educationline %>% pivot_longer(names_to = "year", v
 
 #let's rearrange the columns order
 part4_incomeline <- part4_incomeline %>% select(GeoFips, GeoName, year, income_per_capita)
-
 part4_educationline <- part4_educationline %>% rename(GeoName = Name) %>% select(GeoFips, GeoName, year, college_degree)
 
-part4_incomeline
-part4_educationline
-```
 
-## List of Data to be Visualized
-- part1_merged
-- part2_map1
-- part2_map2
-- part3_incomepercapita
-- part3_education
-- part4_incomeline
-- part4_educationline
+part4_incomeline <- part4_incomeline[ifelse(part4_incomeline$GeoName == "United States", FALSE, TRUE), ]
+part4_educationline <- part4_educationline[ifelse(part4_educationline$GeoName == "United States", FALSE, TRUE), ]
