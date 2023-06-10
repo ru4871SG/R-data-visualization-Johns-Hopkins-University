@@ -25,7 +25,7 @@ ui <- navbarPage(
            fluidPage(
              sidebarLayout(
                sidebarPanel(
-                 helpText("Scatterplot to see the correlation between income per capita vs. college completion and employment percentage. Choose the y-value to change the plot."),
+                 helpText("Scatterplots to see the correlation between income per capita vs. college completion and employment percentage. Choose the y-value to change the plot."),
                  selectInput(
                    #we use input$plot1_input in the server side
                    "plot1_input", h3("Select the y-value"),
@@ -45,7 +45,7 @@ ui <- navbarPage(
            fluidPage(
              sidebarLayout(
                sidebarPanel(
-                 helpText("Interactive map to see income per capita level by state."),
+                 helpText("Interactive map and vertical bar graph to see income per capita level by state."),
                  sliderInput(inputId = "selected_year", 
                              label = "Select the Year:", 
                              min = 1970, 
@@ -73,7 +73,7 @@ ui <- navbarPage(
            fluidPage(
              sidebarLayout(
                sidebarPanel(
-                 helpText("Interactive map to see college completion by state."),
+                 helpText("Interactive map and vertical bar graph to see college completion by state."),
                  selectInput(
                    "selected_year2", h3("Select the Year"),
                    choices = list(
@@ -102,7 +102,7 @@ ui <- navbarPage(
            fluidPage(
              mainPanel(
                fluidRow(
-                 helpText("Line graphs to see the growth of income per capita and education level over time."),
+                 helpText("Two line graphs to see the growth of income per capita and education level over time."),
                  plotlyOutput("plot4"),
                  tags$div(style = "display:inline-block; width:25px;"),
                  plotlyOutput("plot5")
